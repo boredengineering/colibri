@@ -29,6 +29,8 @@ nvidia-smi -lgc 2100,2850 >/dev/null 2>&1 || true
 echo "[Flash Profile] Launching tuned Colibrì background server for GLM-5.3-Flash..."
 nice -n 12 env \
   DISPLAY= \
+  VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json \
+  COLI_NO_OMP_TUNE=1 \
   COLI_VULKAN=1 \
   COLI_MODEL=/models/glm-5.3-flash \
   COLI_VRAM_CACHE_MB=105000 \
