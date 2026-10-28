@@ -27,6 +27,16 @@ nvidia-smi -pm 1 >/dev/null 2>&1 || true
 nvidia-smi -rmc >/dev/null 2>&1 || true
 nvidia-smi -lgc 2100,2850 >/dev/null 2>&1 || true
 
+# Resolve model mirror location dynamically (prefer /models_mirror, fallback to legacy workspace path)
+RESOLVED_MIRROR=""
+if [ -d "/models_mirror/glm-5.3" ]; then
+  RESOLVED_MIRROR="/models_mirror/glm-5.3"
+elif [ -d "/workspaces/colibri/models_mirror/glm-5.3" ]; then
+  RESOLVED_MIRROR="/workspaces/colibri/models_mirror/glm-5.3"
+elif [ -d "/workspaces/renanmb-colibri/models_mirror/glm-5.3" ]; then
+  RESOLVED_MIRROR="/workspaces/renanmb-colibri/models_mirror/glm-5.3"
+fi
+
 echo "[Gaming Profile] Launching tuned Colibrì background server..."
 nice -n 12 env \
   DISPLAY= \
@@ -34,7 +44,7 @@ nice -n 12 env \
   COLI_NO_OMP_TUNE=1 \
   COLI_VULKAN=1 \
   COLI_MODEL=/models/glm-5.3 \
-  COLI_MODEL_MIRROR=/workspaces/colibri/models_mirror/glm-5.3 \
+  COLI_MODEL_MIRROR="${RESOLVED_MIRROR}" \
   COLI_VRAM_CACHE_MB=105000 \
   CTX=65536 \
   KV8=0 \

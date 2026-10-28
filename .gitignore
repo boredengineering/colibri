@@ -110,7 +110,7 @@ c/bench/
 
 # pesi modello / artefatti di run
 *.safetensors
-models_mirror/
+models_mirror
 stats*.txt
 *.log
 

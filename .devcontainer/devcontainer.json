@@ -19,12 +19,15 @@
     "-v", "/tmp/.X11-unix:/tmp/.X11-unix:rw",
     "-v", "/mnt/models_fast/models:/models:rw",
     "-v", "/mnt/models_fast/hf_cache:/root/.cache/huggingface:rw",
+    "-v", "/home/tarfy/models_mirror:/models_mirror:rw",
+    "-v", "/home/tarfy/Documents/GitHub/renanmb/colibri:/workspaces/renanmb-colibri:rw",
     "-v", "/home/tarfy/Documents/GitHub/BoredEngineer/colibri:/workspaces/boredengineer-colibri:rw",
     "-v", "/var/run/docker.sock:/var/run/docker.sock"
   ],
   "containerEnv": {
     "COLI_MODEL_DIR": "/models",
-    "COLI_MODEL": "/models/glm53_i4",
+    "COLI_MODEL": "/models/glm-5.3",
+    "COLI_MODEL_MIRROR": "/models_mirror/glm-5.3",
     "COLI_VULKAN": "1",
     "COLI_VRAM_CACHE_MB": "105000",
     "CTX": "65536",
@@ -67,6 +70,6 @@
       }
     }
   },
-  "initializeCommand": "mkdir -p /mnt/models_fast/models /mnt/models_fast/hf_cache /home/tarfy/Documents/GitHub/BoredEngineer/colibri 2>/dev/null || true",
-  "postStartCommand": "echo 'Colibri Environment Ready.' && (ln -sfn /workspaces/boredengineer-colibri /workspaces/BoredEngineer-colibri 2>/dev/null || true) && nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader && vulkaninfo --summary 2>/dev/null | grep -E 'apiVersion|deviceName' || true"
+  "initializeCommand": "mkdir -p /mnt/models_fast/models /mnt/models_fast/hf_cache /home/tarfy/models_mirror /home/tarfy/Documents/GitHub/renanmb/colibri /home/tarfy/Documents/GitHub/BoredEngineer/colibri 2>/dev/null || true",
+  "postStartCommand": "echo 'Colibri Environment Ready.' && (ln -sfn /workspaces/boredengineer-colibri /workspaces/BoredEngineer-colibri 2>/dev/null || true) && ([ -d /models_mirror/glm-5.3 ] || ([ -d /workspaces/renanmb-colibri/models_mirror/glm-5.3 ] && ln -sfn /workspaces/renanmb-colibri/models_mirror/glm-5.3 /models_mirror/glm-5.3 2>/dev/null) || ([ -d /workspaces/colibri/models_mirror/glm-5.3 ] && ln -sfn /workspaces/colibri/models_mirror/glm-5.3 /models_mirror/glm-5.3 2>/dev/null) || true) && ([ -d /workspaces/colibri/models_mirror ] || ([ -d /workspaces/renanmb-colibri/models_mirror ] && ln -sfn /workspaces/renanmb-colibri/models_mirror /workspaces/colibri/models_mirror 2>/dev/null) || true) && nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader && vulkaninfo --summary 2>/dev/null | grep -E 'apiVersion|deviceName' || true"
 }
